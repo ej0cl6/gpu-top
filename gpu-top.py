@@ -1,7 +1,5 @@
 import subprocess
 import re
-import ipdb
-
 
 gpu_stats = subprocess.getoutput("nvidia-smi").split('\n')
 n_line = len(gpu_stats)
