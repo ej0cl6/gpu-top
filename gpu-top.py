@@ -45,9 +45,8 @@ while i < n_line:
         pid_info = re.split(r'\s+', gpu_stats[i])
         gpu_id = pid_info[1]
         pid = pid_info[2]
-        pname = pid_info[4]
         pmem = pid_info[5]
-        pid_results.append((gpu_id, pid, pname, pmem))
+        pid_results.append((gpu_id, pid, pmem))
         pids.append(pid)
         i += 1
     else:
@@ -62,7 +61,7 @@ print("+------------------------------------------------------------------------
 print("| GPU    PID  User           Process name                               Memory |")
 print("|==============================================================================|")
 
-for gpu_id, pid, pname, pmem in pid_results:
+for gpu_id, pid, pmem in pid_results:
     print("| {} {}  {} {} {} |".format(gpu_id.rjust(3), pid.rjust(6), pid2user[pid][:14].ljust(14), pid2cmd[pid][:39].ljust(39), pmem.rjust(9)))
 print("+------------------------------------------------------------------------------+")
 
