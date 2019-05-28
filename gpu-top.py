@@ -63,6 +63,6 @@ print("| GPU    PID  User           Process name                               M
 print("|==============================================================================|")
 
 for gpu_id, pid, pname, pmem in pid_results:
-    print("| {} {}  {} {} {} |".format(gpu_id.rjust(3), pid.rjust(6), pid2user[pid][:14].ljust(14), pid2cmd[pid][:40].ljust(40), pmem.rjust(8)))
+    print("| {} {}  {} {} {} |".format(gpu_id.rjust(3), pid.rjust(6), pid2user[pid][:14].ljust(14), pid2cmd[pid][:39].ljust(39), pmem.rjust(9)))
 print("+------------------------------------------------------------------------------+")
 
