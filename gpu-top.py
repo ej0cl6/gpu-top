@@ -53,15 +53,16 @@ while i < n_line:
     else:
         break
 
-pid_stats = subprocess.getoutput("ps -o pid,user -p {}".format(",".join(pids))).split('\n')
-pid_user_pair = [re.split(r'\s+', line.strip()) for line in pid_stats[1:]]
-pid2user = {pair[0]: pair[1] for pair in pid_user_pair}
+pid_stats = subprocess.getoutput("ps -o pid,user,cmd -p {}".format(",".join(pids))).split('\n')
+pid_pair = [re.split(r'\s+', line.strip(), 2) for line in pid_stats[1:]]
+pid2user = {pair[0]: pair[1] for pair in pid_pair}
+pid2cmd = {pair[0]: pair[2] for pair in pid_pair}
 
 print("+------------------------------------------------------------------------------+")
-print("| GPU    PID  User            Process name                              Memory |")
+print("| GPU    PID  User           Process name                               Memory |")
 print("|==============================================================================|")
 
 for gpu_id, pid, pname, pmem in pid_results:
-    print("| {} {}  {} {} {} |".format(gpu_id.rjust(3), pid.rjust(6), pid2user[pid].ljust(15), pname.ljust(39), pmem.rjust(8)))
+    print("| {} {}  {} {} {} |".format(gpu_id.rjust(3), pid.rjust(6), pid2user[pid][:14].ljust(14), pid2cmd[pid][:40].ljust(40), pmem.rjust(8)))
 print("+------------------------------------------------------------------------------+")
 
