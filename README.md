@@ -26,11 +26,11 @@ Tue May 28 00:31:43 2019
 |   6    25%   23C    P8     8W / 250W           10MiB / 11178MiB           0% |
 |   7    25%   24C    P8     7W / 250W           10MiB / 11178MiB           0% |
 +------------------------------------------------------------------------------+
-| GPU    PID  User            Process name                              Memory |
+| GPU    PID  User           Process name                               Memory |
 |==============================================================================|
-|   0  17757  username        python                                   9139MiB |
-|   0  29673  bob             python                                    577MiB |
-|   2  19423  alice           python3                                   649MiB |
-|   4   9897  helloworld      python                                   1659MiB |
+|   0  17757  username       python train.py --data ./data --debug     9139MiB |
+|   0  29673  bob            python bob.py -n 3                         577MiB |
+|   2  19423  alice          python main.py --train --save              649MiB |
+|   4   9897  helloworld     python test.py                            1659MiB |
 +------------------------------------------------------------------------------+
 ```
