@@ -1,0 +1,69 @@
+import subprocess
+import re
+import ipdb
+
+
+gpu_stats = subprocess.getoutput("nvidia-smi").split('\n')
+n_line = len(gpu_stats)
+
+print(gpu_stats[0])
+print("+------------------------------------------------------------------------------+")
+print("| GPU    Fan  Temp  Perf  Pwr:Usage/Cap              Memory-Usage  Utilization |")
+print("|==============================================================================|")
+
+# find gpu info start
+i = 1
+while i < n_line and not gpu_stats[i].startswith("|=="):
+    i += 1
+i += 1
+
+# print gpu info
+while i < n_line:
+    if gpu_stats[i].startswith("+--"):
+        i += 1
+    elif gpu_stats[i].startswith("|"):
+        gpu_id = int(gpu_stats[i][1:5])
+        gpu_info = gpu_stats[i+1].split('|')
+        gpu_temp = gpu_info[1] 
+        gpu_mem = gpu_info[2]
+        gpu_utl = gpu_info[3][:8]
+        print("| {} {} {} {} |".format(str(gpu_id).rjust(3), gpu_temp.rjust(33), gpu_mem.rjust(26), gpu_utl.rjust(11)))
+        i += 2
+    else:
+        break
+
+# find pid info start
+while i < n_line and not gpu_stats[i].startswith("|=="):
+    i += 1
+i += 1
+
+# print pid info
+pid_results = []
+pids = []
+while i < n_line:
+    if gpu_stats[i].startswith("+--"):
+        i += 1
+    elif gpu_stats[i].startswith("|"):
+        pid_info = re.split(r'\s+', gpu_stats[i])
+        gpu_id = pid_info[1]
+        pid = pid_info[2]
+        pname = pid_info[4]
+        pmem = pid_info[5]
+        pid_results.append((gpu_id, pid, pname, pmem))
+        pids.append(pid)
+        i += 1
+    else:
+        break
+
+pid_stats = subprocess.getoutput("ps -o pid,user -p {}".format(",".join(pids))).split('\n')
+pid_user_pair = [re.split(r'\s+', line.strip()) for line in pid_stats[1:]]
+pid2user = {pair[0]: pair[1] for pair in pid_user_pair}
+
+print("+------------------------------------------------------------------------------+")
+print("| GPU    PID  User            Process name                              Memory |")
+print("|==============================================================================|")
+
+for gpu_id, pid, pname, pmem in pid_results:
+    print("| {} {}  {} {} {} |".format(gpu_id.rjust(3), pid.rjust(6), pid2user[pid].ljust(15), pname.ljust(39), pmem.rjust(8)))
+print("+------------------------------------------------------------------------------+")
+
