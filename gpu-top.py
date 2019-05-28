@@ -6,7 +6,7 @@ n_line = len(gpu_stats)
 
 print(gpu_stats[0])
 print("+------------------------------------------------------------------------------+")
-print("| GPU    Fan  Temp  Perf  Pwr:Usage/Cap              Memory-Usage  Utilization |")
+print("| GPU    Fan  Temp  Perf   Pwr:Usage/Cap            Memory-Usage   Utilization |")
 print("|==============================================================================|")
 
 # find gpu info start
@@ -22,10 +22,10 @@ while i < n_line:
     elif gpu_stats[i].startswith("|"):
         gpu_id = int(gpu_stats[i][1:5])
         gpu_info = gpu_stats[i+1].split('|')
-        gpu_temp = gpu_info[1] 
-        gpu_mem = gpu_info[2]
+        gpu_temp = gpu_info[1].strip()
+        gpu_mem = gpu_info[2].strip()
         gpu_utl = gpu_info[3][:8]
-        print("| {} {} {} {} |".format(str(gpu_id).rjust(3), gpu_temp.rjust(33), gpu_mem.rjust(26), gpu_utl.rjust(11)))
+        print("| {} {} {} {} |".format(str(gpu_id).rjust(3), gpu_temp.rjust(32), gpu_mem.rjust(25), gpu_utl.rjust(13)))
         i += 2
     else:
         break
