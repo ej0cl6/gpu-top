@@ -15,7 +15,7 @@ watch -n 1 python gpu-top.py
 ```
 Tue May 28 00:31:43 2019
 +------------------------------------------------------------------------------+
-| GPU    Fan  Temp  Perf   Pwr:Usage/Cap            Memory-Usage   Utilization |
+| GPU    Fan  Temp  Perf  Pwr:Usage/Cap             Memory-Usage   Utilization |
 |==============================================================================|
 |   0    25%   30C    P8   120W / 250W        9726MiB / 11178MiB           61% |
 |   1    25%   25C    P8     7W / 250W          10MiB / 11178MiB            0% |
