@@ -45,7 +45,7 @@ while i < n_line:
         pid_info = re.split(r'\s+', gpu_stats[i])
         gpu_id = pid_info[1]
         pid = pid_info[2]
-        pmem = pid_info[5]
+        pmem = pid_info[-2]
         pid_results.append((gpu_id, pid, pmem))
         pids.append(pid)
         i += 1
@@ -57,7 +57,7 @@ print("| GPU    PID  User           Process name                               M
 print("|==============================================================================|")
 
 if len(pids) > 0:
-    pid_stats = subprocess.getoutput("ps -o pid,user,cmd -p {}".format(",".join(pids))).split('\n')
+    pid_stats = subprocess.getoutput("ps -o pid,user:14,cmd -p {}".format(",".join(pids))).split('\n')
     pid_pair = [re.split(r'\s+', line.strip(), 2) for line in pid_stats[1:]]
     pid2user = {pair[0]: pair[1] for pair in pid_pair}
     pid2cmd = {pair[0]: pair[2] for pair in pid_pair}
