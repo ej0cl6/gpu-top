@@ -5,9 +5,9 @@ gpu_stats = subprocess.getoutput("nvidia-smi").split('\n')
 n_line = len(gpu_stats)
 
 print(gpu_stats[0])
-print("+------------------------------------------------------------------------------+")
-print("| GPU    Fan  Temp  Perf  Pwr:Usage/Cap             Memory-Usage   Utilization |")
-print("|==============================================================================|")
+print("+-------------------------------------------------------------------------------+")
+print("| GPU     Fan  Temp  Perf  Pwr:Usage/Cap             Memory-Usage   Utilization |")
+print("|===============================================================================|")
 
 # find gpu info start
 i = 1
@@ -19,13 +19,15 @@ i += 1
 while i < n_line:
     if gpu_stats[i].startswith("+--"):
         i += 1
+    elif gpu_stats[i].startswith("|            "):
+        i += 1
     elif gpu_stats[i].startswith("|"):
         gpu_id = int(gpu_stats[i][1:5])
         gpu_info = gpu_stats[i+1].split('|')
         gpu_temp = gpu_info[1].strip()
         gpu_mem = gpu_info[2].strip()
         gpu_utl = gpu_info[3][:8]
-        print("| {} {} {} {} |".format(str(gpu_id).rjust(3), gpu_temp.rjust(32), gpu_mem.rjust(25), gpu_utl.rjust(13)))
+        print("| {} {} {} {} |".format(str(gpu_id).rjust(3), gpu_temp.rjust(33), gpu_mem.rjust(25), gpu_utl.rjust(13)))
         i += 2
     else:
         break
@@ -44,7 +46,7 @@ while i < n_line:
     elif gpu_stats[i].startswith("|"):
         pid_info = re.split(r'\s+', gpu_stats[i])
         gpu_id = pid_info[1]
-        pid = pid_info[2]
+        pid = pid_info[4]
         pmem = pid_info[-2]
         pid_results.append((gpu_id, pid, pmem))
         pids.append(pid)
@@ -52,9 +54,9 @@ while i < n_line:
     else:
         break
 
-print("+------------------------------------------------------------------------------+")
-print("| GPU    PID  User           Process name                               Memory |")
-print("|==============================================================================|")
+print("+-------------------------------------------------------------------------------+")
+print("| GPU     PID  User           Process name                               Memory |")
+print("|===============================================================================|")
 
 if len(pids) > 0:
     pid_stats = subprocess.getoutput("ps -o pid,user:14,cmd -p {}".format(",".join(pids))).split('\n')
@@ -62,8 +64,8 @@ if len(pids) > 0:
     pid2user = {pair[0]: pair[1] for pair in pid_pair}
     pid2cmd = {pair[0]: pair[2] for pair in pid_pair}
     for gpu_id, pid, pmem in pid_results:
-        print("| {} {}  {} {} {} |".format(gpu_id.rjust(3), pid.rjust(6), pid2user[pid][:14].ljust(14), pid2cmd[pid][:39].ljust(39), pmem.rjust(9)))
+        print("| {} {}  {} {} {} |".format(gpu_id.rjust(3), pid.rjust(7), pid2user[pid][:14].ljust(14), pid2cmd[pid][:39].ljust(39), pmem.rjust(9)))
 else:
-    print("|  No running processes found                                                  |")
-print("+------------------------------------------------------------------------------+")
+    print("|  No running processes found                                                   |")
+print("+-------------------------------------------------------------------------------+")
 
