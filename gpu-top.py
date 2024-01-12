@@ -27,6 +27,7 @@ while i < n_line:
         gpu_temp = gpu_info[1].strip()
         gpu_mem = gpu_info[2].strip()
         gpu_utl = gpu_info[3][:8]
+        gpu_temp = gpu_temp[:16]+gpu_temp[27:]
         print("| {} {} {} {} |".format(str(gpu_id).rjust(3), gpu_temp.rjust(33), gpu_mem.rjust(25), gpu_utl.rjust(13)))
         i += 2
     else:
